@@ -2,6 +2,7 @@ import { useEffect } from 'react'
 import { Routes, Route, useLocation } from 'react-router-dom'
 import Intro from './components/Intro'
 import { Header, Footer, CartDrawer, Toast } from './components/Layout'
+import { QuickViewModal } from './components/Common'
 import Home from './pages/Home'
 import Shop from './pages/Shop'
 import Product from './pages/Product'
@@ -18,8 +19,11 @@ import AdminApp from './admin/AdminApp'
 function ScrollTop() {
   const { pathname, hash } = useLocation()
   useEffect(() => {
-    if (hash) { document.querySelector(hash)?.scrollIntoView({ behavior: 'smooth' }); return }
-    window.scrollTo(0, 0)
+    if (hash) {
+      document.querySelector(hash)?.scrollIntoView({ behavior: 'smooth' })
+      return
+    }
+    window.scrollTo({ top: 0, behavior: 'smooth' })
   }, [pathname, hash])
   return null
 }
@@ -28,13 +32,17 @@ export default function App() {
   const { pathname } = useLocation()
   const isAdmin = pathname.startsWith('/admin')
 
-  if (isAdmin) return (
-    <>
-      <ScrollTop />
-      <Routes><Route path="/admin/*" element={<AdminApp />} /></Routes>
-      <Toast />
-    </>
-  )
+  if (isAdmin) {
+    return (
+      <>
+        <ScrollTop />
+        <Routes>
+          <Route path="/admin/*" element={<AdminApp />} />
+        </Routes>
+        <Toast />
+      </>
+    )
+  }
 
   return (
     <>
@@ -63,6 +71,7 @@ export default function App() {
       </main>
       <Footer />
       <CartDrawer />
+      <QuickViewModal />
       <Toast />
     </>
   )
